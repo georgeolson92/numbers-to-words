@@ -67,10 +67,10 @@ namespace NumberToWords.Objects
 
     public int input;
     private int[] _numbers = new int[] {0,1,2,3,4,5,6,7,8,9};
-    private string[] _ones = new string[] {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
-    private string[] _teens = new string[] {"zero", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
-    private string[] _tens = new string[] {"zero", "ten", "twenty", "thirty", "fourty", "fifty", "sixty", "seventy", "eightty", "ninety"};
-    private string[] _hundreds = new string[] {"zero", "one hundred", "two hundred", "three hundred", "four hundred", "five hundred", "six hundred", "seven hundred", "eight hundred", "nine hundred"};
+    private string[] _ones = new string[] {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+    private string[] _teens = new string[] {"ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
+    private string[] _tens = new string[] {"", "ten", "twenty", "thirty", "fourty", "fifty", "sixty", "seventy", "eightty", "ninety"};
+    private string[] _hundreds = new string[] {"", "one hundred", "two hundred", "three hundred", "four hundred", "five hundred", "six hundred", "seven hundred", "eight hundred", "nine hundred"};
 
     // public static GetNumbers()
     // {
@@ -78,25 +78,46 @@ namespace NumberToWords.Objects
     // }
 
 
-    int inputLength = 3;
 
     public string GetWordNumber(int input)
     {
+      string inputString = input.ToString();
+      char[] digitArray = inputString.ToCharArray();
+      int inputLength = digitArray.Length;
+      List<string> newNumberDigits = new List<string>();
+
       if ( inputLength == 1 ){
         return _ones[input / 1];
       }
       else if ( inputLength == 2 && input < 20 ){
-        return _teens[input / 10];
+        int teens = (int)Char.GetNumericValue(digitArray[0]);
+        int ones = (int)Char.GetNumericValue(digitArray[1]);
+        newNumberDigits.Add(_teens[teens]);
+        newNumberDigits.Add(_ones[ones]);
+        string resultingNumber = String.Join(" ", newNumberDigits);
+        return resultingNumber;
       }
-      else if ( inputLength == 2 && input > 20 ){
-        return _tens[input / 10];
+      else if ( inputLength == 2 && input >= 20 ){
+        int tens = (int)Char.GetNumericValue(digitArray[0]);
+        int ones = (int)Char.GetNumericValue(digitArray[1]);
+        newNumberDigits.Add(_tens[tens]);
+        newNumberDigits.Add(_ones[ones]);
+        string resultingNumber = String.Join(" ", newNumberDigits);
+        return resultingNumber;
       }
       else if ( inputLength == 3 ){
-        return _hundreds[input / 100];
+        int hundreds = (int)Char.GetNumericValue(digitArray[0]);
+        int tens = (int)Char.GetNumericValue(digitArray[1]);
+        int ones =  (int)Char.GetNumericValue(digitArray[2]);
+        newNumberDigits.Add(_hundreds[hundreds]);
+        newNumberDigits.Add(_tens[tens]);
+        newNumberDigits.Add(_ones[ones]);
+        string resultingNumber = String.Join(" ", newNumberDigits);
+        return resultingNumber;
       }
       else
       {
-        return "screw you";
+        return "nothing! you lose!";
       }
     }
 
